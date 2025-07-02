@@ -4,6 +4,8 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import spacy
+from sentence_transformers import SentenceTransformer
+import numpy as np
 
 # NLTK vorbereiten
 nltk.download('punkt')
@@ -65,18 +67,45 @@ if __name__ == "__main__":
     input_path = "C:\\Users\\dxschecht\\Desktop\\output_cleaned.json"
     processed_data, tfidf_input = process_json_file(input_path)
 
+####### HIer beginnt der Satz-Embeddingteil #######
+
+    # Modell laden
+    model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')  # Gut für deutsch & englisch
+
+     #Embeddings berechnen
+    embeddings = model.encode(tfidf_input, show_progress_bar=True)
+
+     #Optional: Embeddings mit Originaltexten speichern
+    vectorized_data = [
+        {
+            "original": processed_data[i]["original"],
+            "processed": processed_data[i]["processed"],
+            "embedding": embeddings[i].tolist()  # JSON-kompatibel
+        }
+        for i in range(len(processed_data))
+    ]
+
+     #Speichern der Embeddings
+    with open("C:\\Users\\dxschecht\\Desktop\\Bonn_Phase_1_Embeddings.json", "w", encoding="utf-8") as f_vec:
+        json.dump(vectorized_data, f_vec, ensure_ascii=False, indent=4)
+
+####### Hier endet der Satz-Embeddingteil #######
+
+####### Das hier ist der TDIDF-Vektorisierungsteil ########
+
     # Speichern der verarbeiteten Tokens
-    with open("C:\\Users\\dxschecht\\Desktop\\Bonn_Phase_1.json", "w", encoding="utf-8") as f_out:
-        json.dump(processed_data, f_out, ensure_ascii=False, indent=4)
+    #with open("C:\\Users\\dxschecht\\Desktop\\Bonn_Phase_1.json", "w", encoding="utf-8") as f_out:
+     #   json.dump(processed_data, f_out, ensure_ascii=False, indent=4)
 
     # 🧠 TF-IDF Verarbeitung
-    from sklearn.feature_extraction.text import TfidfVectorizer
+    #from sklearn.feature_extraction.text import TfidfVectorizer
     import pandas as pd
 
-    vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(tfidf_input)
+    #vectorizer = TfidfVectorizer()
+    #tfidf_matrix = vectorizer.fit_transform(tfidf_input)
 
-    df_tfidf = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
-    df_tfidf.to_csv("C:\\Users\\dxschecht\\Desktop\\Bonn_TFIDF.csv", index=False)
+    #df_tfidf = pd.DataFrame(tfidf_matrix.toarray(), columns=vectorizer.get_feature_names_out())
+   # df_tfidf.to_csv("C:\\Users\\dxschecht\\Desktop\\Bonn_TFIDF.csv", index=False)
 
+########### Hier hört der TDIDF-Vektorisierungsteil auf #######
     print("Phase 1 & 2 abgeschlossen.")
