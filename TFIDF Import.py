@@ -7,7 +7,7 @@ csv_path = "C:\\Users\\dxschecht\\Desktop\\Bonn_TFIDF.csv"  # anpassen
 tfidf_df = pd.read_csv(csv_path)
 
 # === 2. NMF-Modell anwenden ===
-n_topics = 20  # Anzahl der Themen (anpassbar)
+n_topics = 10  # Anzahl der Themen (anpassbar)
 nmf_model = NMF(n_components=n_topics, random_state=42)
 W = nmf_model.fit_transform(tfidf_df)
 H = nmf_model.components_
@@ -19,7 +19,7 @@ n_top_words = 10
 for topic_idx, topic in enumerate(H):
     top_indices = topic.argsort()[:-n_top_words - 1:-1]
     top_words = [feature_names[i] for i in top_indices]
-    print(f"\n🧠 Thema {topic_idx + 1}: {', '.join(top_words)}")
+    print(f"\n Thema {topic_idx + 1}: {', '.join(top_words)}")
 
 # === 4. Visualisierung mit Matplotlib ===
 fig, axes = plt.subplots(n_topics, 1, figsize=(10, n_topics * 2.5))

@@ -97,7 +97,7 @@ if __name__ == "__main__":
     #with open("C:\\Users\\dxschecht\\Desktop\\Bonn_Phase_1.json", "w", encoding="utf-8") as f_out:
      #   json.dump(processed_data, f_out, ensure_ascii=False, indent=4)
 
-    # 🧠 TF-IDF Verarbeitung
+    # TF-IDF Verarbeitung
     #from sklearn.feature_extraction.text import TfidfVectorizer
     import pandas as pd
 
