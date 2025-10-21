@@ -7,7 +7,7 @@ csv_path = "C:\\Users\\dxschecht\\Desktop\\Bonn_TFIDF.csv"  # anpassen
 tfidf_df = pd.read_csv(csv_path)
 
 # === 2. NMF-Modell anwenden ===
-n_topics = 10  # Anzahl der Themen (anpassbar)
+n_topics = 5  # Anzahl der Themen (anpassbar)
 nmf_model = NMF(n_components=n_topics, random_state=42)
 W = nmf_model.fit_transform(tfidf_df)
 H = nmf_model.components_

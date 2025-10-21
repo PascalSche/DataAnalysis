@@ -23,6 +23,12 @@ topic_model = BERTopic(language="multilingual")
 topics, probs = topic_model.fit_transform(texts, embeddings)
 
 # -------------------------------
+# 3b. Ähnliche Themen zusammenführen
+# -------------------------------
+# Reduziere die Themenanzahl, um Duplikate zu vermeiden
+topic_model.reduce_topics(texts, nr_topics=10)
+
+# -------------------------------
 # 4a. Visualisierung: Top-Wörter pro Thema
 # -------------------------------
 fig1 = topic_model.visualize_barchart(top_n_topics=10)
